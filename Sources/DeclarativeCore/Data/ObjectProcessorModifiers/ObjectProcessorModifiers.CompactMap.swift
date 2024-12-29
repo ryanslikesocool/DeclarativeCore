@@ -1,4 +1,6 @@
 public extension ObjectProcessorModifiers {
+	/// The compact map modifier.
+	///
 	/// ## See Also
 	/// - ``ObjectProcessor/compactMap(_:)``
 	/// - ``ObjectProcessor/compactMap()-4idb1``
@@ -8,6 +10,7 @@ public extension ObjectProcessorModifiers {
 	{
 		private let transform: (Input.Element) throws -> OutputElement?
 
+		/// Create a compact map modifier.
 		public init(_ transform: @escaping (Input.Element) throws -> OutputElement?) {
 			self.transform = transform
 		}
@@ -21,6 +24,7 @@ public extension ObjectProcessorModifiers {
 // MARK: - Convenience
 
 public extension ObjectProcessorModifiers.CompactMap {
+	/// Create a compact map modifier.
 	init() where
 		Input.Element == OutputElement?
 	{
@@ -29,6 +33,7 @@ public extension ObjectProcessorModifiers.CompactMap {
 		}
 	}
 
+	/// Create a compact map modifier.
 	init<Failure>() where
 		Input: Sequence,
 		Input.Element == Result<OutputElement, Failure>,
@@ -47,6 +52,9 @@ public extension ObjectProcessor where
 	Output: Sequence
 {
 	/// Append a `compactMap` operation to the object processor.
+	///
+	/// ## See Also
+	/// - ``ObjectProcessorModifiers/CompactMap``
 	func compactMap<OutputElement>(
 		_ transform: @escaping (Self.Output.Element) throws -> OutputElement?
 	) -> ModifiedObject<Self, ObjectProcessorModifiers.CompactMap<Self.Output, OutputElement>> {
@@ -55,6 +63,9 @@ public extension ObjectProcessor where
 	}
 
 	/// Append a `compactMap` operation to the object processor.
+	///
+	/// ## See Also
+	/// - ``ObjectProcessorModifiers/CompactMap``
 	func compactMap<OutputElement>() -> ModifiedObject<Self, ObjectProcessorModifiers.CompactMap<Self.Output, OutputElement>> where
 		Self.Output.Element == OutputElement?
 	{
@@ -63,6 +74,9 @@ public extension ObjectProcessor where
 	}
 
 	/// Append a `compactMap` operation to the object processor, returning only successes.
+	///
+	/// ## See Also
+	/// - ``ObjectProcessorModifiers/CompactMap``
 	func compactMap<Success, Failure>() -> ModifiedObject<Self, ObjectProcessorModifiers.CompactMap<Self.Output, Success>> where
 		Self.Output.Element == Result<Success, Failure>,
 		Failure: Error

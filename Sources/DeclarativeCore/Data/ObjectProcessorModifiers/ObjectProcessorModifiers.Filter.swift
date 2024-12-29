@@ -3,6 +3,8 @@ import Foundation
 #endif
 
 public extension ObjectProcessorModifiers {
+	/// The filter modifier.
+	///
 	/// ## See Also
 	/// - ``ObjectProcessor/filter(_:)``
 	/// - ``ObjectProcessor/filter(using:)``
@@ -13,6 +15,7 @@ public extension ObjectProcessorModifiers {
 
 		private let isIncluded: (Input.Element) throws -> Bool
 
+		/// Create a filter modifier.
 		public init(_ isIncluded: @escaping (Input.Element) throws -> Bool) {
 			self.isIncluded = isIncluded
 		}
@@ -27,6 +30,7 @@ public extension ObjectProcessorModifiers {
 
 public extension ObjectProcessorModifiers.Filter {
 #if canImport(Foundation)
+	/// Create a filter modifier.
 	@available(iOS 17, macCatalyst 17, macOS 14, tvOS 17, visionOS 1, watchOS 10, *)
 	init(using predicate: Predicate<Self.Output.Element>) {
 		self.init(predicate.evaluate(_:))
@@ -36,6 +40,9 @@ public extension ObjectProcessorModifiers.Filter {
 
 public extension ObjectProcessor {
 	/// Append a `filter` operation to the object processor.
+	///
+	/// ## See Also
+	/// - ``ObjectProcessorModifiers/Filter``
 	func filter(
 		_ isIncluded: @escaping (Self.Output.Element) throws -> Bool
 	) -> ModifiedObject<Self, ObjectProcessorModifiers.Filter<Self.Output>> where
@@ -47,6 +54,9 @@ public extension ObjectProcessor {
 
 #if canImport(Foundation)
 	/// Append a `filter` operation to the object processor.
+	///
+	/// ## See Also
+	/// - ``ObjectProcessorModifiers/Filter``
 	@available(iOS 17, macCatalyst 17, macOS 14, tvOS 17, visionOS 1, watchOS 10, *)
 	func filter(
 		using predicate: Predicate<Self.Output.Element>

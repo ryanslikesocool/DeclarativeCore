@@ -1,9 +1,16 @@
-import Combine
-
+/// ## See Also
+/// - ``ObjectProcessor/modifier(_:)``
 public struct ModifiedObject<Upstream, Downstream> {
+	/// The upstream object.
 	public let upstream: Upstream
-	public let downstream: Downstream
 
+	/// The downstream object.
+	public let downstream: Downstream
+	
+	/// Create a modified object.
+	/// - Parameters:
+	///   - upstream: The upstream object.
+	///   - downstream: The downstream object.
 	public init(upstream: Upstream, downstream: Downstream) {
 		self.upstream = upstream
 		self.downstream = downstream

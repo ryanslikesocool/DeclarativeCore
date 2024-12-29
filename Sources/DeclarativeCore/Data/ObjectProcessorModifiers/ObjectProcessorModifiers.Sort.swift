@@ -3,6 +3,8 @@ import Foundation
 #endif
 
 public extension ObjectProcessorModifiers {
+	/// The sort modifier.
+	///
 	/// ## See Also
 	/// - ``ObjectProcessor/sort(by:)-2an6i``
 	/// - ``ObjectProcessor/sort(by:)-6vxby``
@@ -14,6 +16,7 @@ public extension ObjectProcessorModifiers {
 
 		private let areInIncreasingOrder: (Input.Element, Input.Element) throws -> Bool
 
+		/// Create a sort modifier.
 		public init(by areInIncreasingOrder: @escaping (Input.Element, Input.Element) throws -> Bool) {
 			self.areInIncreasingOrder = areInIncreasingOrder
 		}
@@ -27,6 +30,7 @@ public extension ObjectProcessorModifiers {
 // MARK: - Convenience
 
 public extension ObjectProcessorModifiers.Sort {
+	/// Create a sort modifier.
 	init<Compared>(by keyPath: KeyPath<Input.Element, Compared>) where
 		Compared: Comparable
 	{
@@ -36,6 +40,7 @@ public extension ObjectProcessorModifiers.Sort {
 	}
 
 #if canImport(Foundation)
+	/// Create a sort modifier.
 	@available(iOS 15, macCatalyst 15, macOS 12, tvOS 15, watchOS 8, *)
 	init<Comparator>(using comparator: Comparator) where
 		Comparator: SortComparator,
