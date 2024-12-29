@@ -1,5 +1,8 @@
 public protocol ObjectProcessor<Input, Output> {
+	/// The type of the argument for ``process(_:)``.
 	associatedtype Input
+
+	/// The type of the value returned by ``process(_:)``.
 	associatedtype Output
 
 	func process(_ input: Input) throws -> Output
