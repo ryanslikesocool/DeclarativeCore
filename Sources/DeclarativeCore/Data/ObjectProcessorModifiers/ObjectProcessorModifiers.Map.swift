@@ -5,7 +5,9 @@ public extension ObjectProcessorModifiers {
 	struct Map<Input, Output>: ObjectProcessor {
 		private let transform: (Input) throws -> Output
 
-		public init(_ transform: @escaping (Input) throws -> Output) {
+		public init(
+			_ transform: @escaping (Input) throws -> Output
+		) {
 			self.transform = transform
 		}
 
@@ -16,6 +18,19 @@ public extension ObjectProcessorModifiers {
 }
 
 // MARK: - Convenience
+
+public extension ObjectProcessorModifiers.Map {
+	init<OutputElement>(
+		_ transform: @escaping (Input.Element) throws -> OutputElement
+	) where
+		Input: Sequence,
+		Output == [OutputElement]
+	{
+		self.init { (input: Input) throws -> [OutputElement] in
+			try input.map(transform)
+		}
+	}
+}
 
 public extension ObjectProcessor {
 	/// Append a `map` operation to the object processor.
@@ -32,8 +47,7 @@ public extension ObjectProcessor {
 	) -> ModifiedObject<Self, ObjectProcessorModifiers.Map<Self.Output, [OutputElement]>> where
 		Self.Output: Sequence
 	{
-		map { (input: Self.Output) throws -> [OutputElement] in
-			try input.map(transform)
-		}
+		let modifier = ObjectProcessorModifiers.Map<Self.Output, [OutputElement]>(transform)
+		return self.modifier(modifier)
 	}
 }

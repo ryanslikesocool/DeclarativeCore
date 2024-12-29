@@ -1,8 +1,8 @@
 public extension ObjectProcessorModifiers {
 	/// ## See Also
 	/// - ``ObjectProcessor/compactMap(_:)``
-	/// - ``ObjectProcessor/compactMap()-14s5s``
-	/// - ``ObjectProcessor/compactMap()-15mto``
+	/// - ``ObjectProcessor/compactMap()-4idb1``
+	/// - ``ObjectProcessor/compactMap()-4a9zm``
 	struct CompactMap<Input, OutputElement>: ObjectProcessor where
 		Input: Sequence
 	{
@@ -20,38 +20,54 @@ public extension ObjectProcessorModifiers {
 
 // MARK: - Convenience
 
-public extension ObjectProcessor {
-	/// Append a `compactMap` operation to the object processor.
-	func compactMap<OutputElement>(
-		_ transform: @escaping (Self.Output.Element) throws -> OutputElement?
-	) -> ModifiedObject<Self, ObjectProcessorModifiers.CompactMap<Self.Output, OutputElement>> where
-		Self.Output: Sequence
+public extension ObjectProcessorModifiers.CompactMap {
+	init() where
+		Input.Element == OutputElement?
 	{
-		let modifier = ObjectProcessorModifiers.CompactMap<Self.Output, OutputElement>(transform)
-		return self.modifier(modifier)
-	}
-
-	/// Append a `compactMap` operation to the object processor.
-	func compactMap<Element>() -> ModifiedObject<Self, ObjectProcessorModifiers.CompactMap<Self.Output, Self.Output.Element>> where
-		Self.Output: Sequence,
-		Self.Output.Element == Element?
-	{
-		compactMap { (element: Element?) -> Element? in
+		self.init { (element: OutputElement?) -> OutputElement? in
 			element
 		}
 	}
 
-	/// Append a `compactMap` operation to the object processor, returning only successes.
-	func compactMap<Success, Failure>() -> ModifiedObject<Self, ObjectProcessorModifiers.CompactMap<Self.Output, Success>> where
-		Self.Output: Sequence,
-		Self.Output.Element == Result<Success, Failure>,
+	init<Failure>() where
+		Input: Sequence,
+		Input.Element == Result<OutputElement, Failure>,
 		Failure: Error
 	{
-		compactMap { (element: Result<Success, Failure>) -> Success? in
+		self.init { (element: Result<OutputElement, Failure>) -> OutputElement? in
 			guard case let .success(success) = element else {
 				return nil
 			}
 			return success
 		}
+	}
+}
+
+public extension ObjectProcessor where
+	Output: Sequence
+{
+	/// Append a `compactMap` operation to the object processor.
+	func compactMap<OutputElement>(
+		_ transform: @escaping (Self.Output.Element) throws -> OutputElement?
+	) -> ModifiedObject<Self, ObjectProcessorModifiers.CompactMap<Self.Output, OutputElement>> {
+		let modifier = ObjectProcessorModifiers.CompactMap<Self.Output, OutputElement>(transform)
+		return self.modifier(modifier)
+	}
+
+	/// Append a `compactMap` operation to the object processor.
+	func compactMap<OutputElement>() -> ModifiedObject<Self, ObjectProcessorModifiers.CompactMap<Self.Output, OutputElement>> where
+		Self.Output.Element == OutputElement?
+	{
+		let modifier = ObjectProcessorModifiers.CompactMap<Self.Output, OutputElement>()
+		return self.modifier(modifier)
+	}
+
+	/// Append a `compactMap` operation to the object processor, returning only successes.
+	func compactMap<Success, Failure>() -> ModifiedObject<Self, ObjectProcessorModifiers.CompactMap<Self.Output, Success>> where
+		Self.Output.Element == Result<Success, Failure>,
+		Failure: Error
+	{
+		let modifier = ObjectProcessorModifiers.CompactMap<Self.Output, Success>()
+		return self.modifier(modifier)
 	}
 }

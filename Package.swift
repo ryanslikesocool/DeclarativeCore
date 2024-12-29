@@ -12,6 +12,8 @@ let package = Package(
 		),
 	],
 	targets: [
-		.target(name: "DeclarativeCore"),
+		.target(
+			name: "DeclarativeCore"
+		),
 	]
 )

@@ -1,6 +1,8 @@
+import Combine
+
 public struct ModifiedObject<Upstream, Downstream> {
-	private let upstream: Upstream
-	private let downstream: Downstream
+	public let upstream: Upstream
+	public let downstream: Downstream
 
 	public init(upstream: Upstream, downstream: Downstream) {
 		self.upstream = upstream
